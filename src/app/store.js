@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { ApiSlice } from "../features/api/ApiSlice";
 

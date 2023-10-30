@@ -11,13 +11,14 @@ export const ApiSlice = createApi({
     getVideos: builder.query({
       query: () => "/videos",
       keepUnusedDataFor: 500,
-      providesTags: ["videos"]
+      providesTags: ["videos"],
     }),
     getVideo: builder.query({
       query: (videoId) => `/videos/${videoId}`,
-      providesTags: (result, error, arg) => ["videos", 
-      {type: "video", id: arg},
-    ]
+      providesTags: (result, error, arg) => [
+        "videos",
+        { type: "video", id: arg },
+      ],
     }),
     getRelatedVideos: builder.query({
       query: ({ id, title }) => {
@@ -26,31 +27,47 @@ export const ApiSlice = createApi({
         const queryString = `/videos?${likes.join("&")}&_limit=4`;
         return queryString;
       },
-      providesTags: (result, error, arg) => ["videos", 
-      {type: "relatedVideos", id: arg.id}
-    ]
+      providesTags: (result, error, arg) => [
+        "videos",
+        { type: "relatedVideos", id: arg.id },
+      ],
     }),
     addVideo: builder.mutation({
       query: (data) => ({
         url: `/videos`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ["videos"]
+      invalidatesTags: ["videos"],
     }),
     editVideo: builder.mutation({
-      query: ({id, data}) => ({
+      query: ({ id, data }) => ({
         url: `/videos/${id}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: (result, error, arg) => ["videos", 
-      {type: "video", id: arg.id},
-      {type: "relatedVideos", id: arg.id}
-    ]
+      invalidatesTags: (result, error, arg) => [
+        "videos",
+        { type: "video", id: arg.id },
+        { type: "relatedVideos", id: arg.id },
+      ],
     }),
+    deleteVideo: builder.mutation({
+      query: ( id ) => ({
+        url: `/videos/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["videos"],
+    }),
+
   }),
 });
 
-export const { useGetVideosQuery, useGetVideoQuery, useGetRelatedVideosQuery, useAddVideoMutation, useEditVideoMutation } =
-  ApiSlice;
+export const {
+  useGetVideosQuery,
+  useGetVideoQuery,
+  useGetRelatedVideosQuery,
+  useAddVideoMutation,
+  useEditVideoMutation,
+  useDeleteVideoMutation
+} = ApiSlice;
